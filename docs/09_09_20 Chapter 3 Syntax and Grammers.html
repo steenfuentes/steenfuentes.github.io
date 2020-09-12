@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="Stylesheet" type="text/css" href="style.css">
+<title>09_09_20 Chapter 3 Syntax and Grammers</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+
+<div id="What is Syntax Analysis?"><h2 id="What is Syntax Analysis?" class="header"><a href="#What is Syntax Analysis?">What is Syntax Analysis?</a></h2></div>
+<ul>
+<li>
+Occurs after the scanning of each line of code, terminated by ';', which results in a <em>series of tokens</em> to loaded in for syntactical analysis or <em>parsing</em>.
+
+<li>
+The goal of <em>parsing</em> out tokens is to intepret those tokens and recover the <em>structure</em> described by that series of tokens.
+
+<ul>
+<li>
+If the tokens do not properly enocde a structure, an <em>error</em> is to be reported. 
+
+</ul>
+</ul>
+<div id="What is Syntax Analysis?-System Flow"><h3 id="System Flow" class="header"><a href="#What is Syntax Analysis?-System Flow">System Flow</a></h3></div>
+<p>
+			----- source code -----
+Regular Expressions -&gt; Lexical Analyzer (scanner)
+			----- tokens ----- 
+Context-free grammar-&gt; Syntatic Analyzer (parser) &lt;- WE ARE HERE
+			------ AST (Abstract syntax tree) -----
+Attribute grammer   -&gt; Semantic Analyzer
+			.
+			.
+			.
+			... more not picture...
+</p>
+
+<div id="Syntax vs Semantics"><h2 id="Syntax vs Semantics" class="header"><a href="#Syntax vs Semantics">Syntax vs Semantics</a></h2></div>
+<ul>
+<li>
+<span id="Syntax vs Semantics-Syntax"></span><strong id="Syntax">Syntax</strong> refers to the ordering of the typed languaged, the words and symbols.
+
+<ul>
+<li>
+the form or struture of the expressions, statements, and program units
+
+</ul>
+<li>
+<span id="Syntax vs Semantics-Semantics"></span><strong id="Semantics">Semantics</strong> is how the program works. What the program <em>means</em>.
+
+<li>
+	- the meaning of expressions, statements, and program units.
+
+<li>
+<span id="Syntax vs Semantics-Together, syntax and semantics provide the language's definition."></span><strong id="Together, syntax and semantics provide the language's definition.">Together, syntax and semantics provide the language's definition.</strong>
+
+</ul>
+
+<ul>
+<li>
+Compile time errors are said to be a _static issue
+
+</ul>
+ 
+<div id="Syntax vs Semantics-Backus-Naur Form (BNF)"><h3 id="Backus-Naur Form (BNF)" class="header"><a href="#Syntax vs Semantics-Backus-Naur Form (BNF)">Backus-Naur Form (BNF)</a></h3></div>
+<ul>
+<li>
+notation for describing language grammar rules. 
+
+<li>
+The notation requires:
+
+<ul>
+<li>
+Terminals: legal strings
+
+<li>
+Nonterminals: concepts of the language that can be further refined
+
+<li>
+Rules: expanding nonterminals to a series of nonterminals and terminals
+
+<li>
+Start: a nonterminal that begins the expansion
+
+</ul>
+</ul>
+
+<div id="The General Problem of Describing Syntax: Terminology"><h2 id="The General Problem of Describing Syntax: Terminology" class="header"><a href="#The General Problem of Describing Syntax: Terminology">The General Problem of Describing Syntax: Terminology</a></h2></div>
+<ul>
+<li>
+A <em>sentence</em> is a string of characers over some alphabet
+
+<li>
+A <em>language</em> is a set of sentences.
+
+<li>
+A <em>lexeme</em> is the lowest level syntactic unit (e.g., *, sum, begin)
+
+<li>
+A token is a category of lexemes (e.g., identifier) 
+
+</ul>
+  
+<div id="The General Problem of Describing Syntax: Terminology-BNF amd Context-Free Grammars"><h3 id="BNF amd Context-Free Grammars" class="header"><a href="#The General Problem of Describing Syntax: Terminology-BNF amd Context-Free Grammars" class="justcenter">BNF amd Context-Free Grammars</a></h3></div>
+<ul>
+<li>
+Context-Free Grammars
+
+</ul>
+
+<div id="The General Problem of Describing Syntax: Terminology-BNF Fundamentals"><h3 id="BNF Fundamentals" class="header"><a href="#The General Problem of Describing Syntax: Terminology-BNF Fundamentals" class="justcenter">BNF Fundamentals</a></h3></div>
+<ul>
+<li>
+Grammar is a finite set of rules
+
+<li>
+Specific start rules 
+
+<li>
+An abstaction (or nonterminal symbol) can have more than one RHS
+
+<li>
+Synactic lists are described using recursion
+ 	&lt;ident_list&gt; -&gt; ident
+		      | ident, &lt;ident_list&gt;
+
+<li>
+A derivation is a repeated application of rules, starting with the start symbol
+
+<li>
+a <em>Leftmost derivation</em> is one in which the leftmost nonterminal in each sentential form 
+   is the one that is expanded.			
+
+<li>
+a <span id="The General Problem of Describing Syntax: Terminology-BNF Fundamentals-Parse Tree"></span><strong id="Parse Tree">Parse Tree</strong> is a hierarchical representation of a derivation
+
+</ul>
+
+<div id="Running Example"><h2 id="Running Example" class="header"><a href="#Running Example">Running Example</a></h2></div>
+<p>
+Non-terminal: {E, T, F}
+Terminal: {identifier, number,+,-,*,/,(,)}
+Productions:
+</p>
+
+<p>
+E -&gt; E + T | E - T | T
+T -&gt; T * F | T / F | F
+F -&gt; (E) | identifier | number
+</p>
+
+<p>
+*Is the following a sentence in the language? Part of the grammar?
+<em>left hand derivation</em>
+E -&gt; E + T
+  -&gt; T + T
+  -&gt; F + T
+  -&gt; (E) + T
+  -&gt; (T) + T
+  -&gt; (T * F) + T
+  -&gt; (F * F) + T
+  -&gt; (5 * F) + T
+  -&gt; (5 * x) + T
+  -&gt; (5 * x) + F
+  -&gt; (5 * x) + y
+</p>
+
+<p>
+right most possible as well! 
+</p>
+
+</body>
+</html>
